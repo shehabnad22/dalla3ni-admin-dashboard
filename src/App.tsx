@@ -1,7 +1,7 @@
 import LoginPage from "./pages/LoginPage";
 
 function App() {
-  return <LoginPage onLoginSuccess={() => {}} />;
+  return <LoginPage />;
 }
 
 export default App;
