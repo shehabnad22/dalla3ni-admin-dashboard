@@ -64,6 +64,26 @@
   transition: border-color 0.2s;
 }
 
+.form-group input::placeholder {
+  color: transparent;
+  opacity: 0;
+}
+
+.form-group input::-webkit-input-placeholder {
+  color: transparent;
+  opacity: 0;
+}
+
+.form-group input::-moz-placeholder {
+  color: transparent;
+  opacity: 0;
+}
+
+.form-group input:-ms-input-placeholder {
+  color: transparent;
+  opacity: 0;
+}
+
 .form-group input:focus {
   outline: none;
   border-color: #667eea;

@@ -1,6 +1,5 @@
 // Authentication utilities for Admin Panel
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+import { API_URL } from '../config/api';
 
 // Store token in localStorage
 export const setAuthToken = (token) => {
@@ -23,13 +22,42 @@ export const isAuthenticated = () => {
 // Login function
 export const login = async (email, password) => {
   try {
-    const response = await fetch(`${API_URL}/auth/admin/login`, {
+    // Validate input
+    if (!email || !password) {
+      return { success: false, message: 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' };
+    }
+
+    const loginUrl = `${API_URL}/auth/admin/login`;
+    
+    const response = await fetch(loginUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: email.trim(), password: password.trim() }),
     });
+
+    // Handle rate limiting
+    if (response.status === 429) {
+      const errorData = await response.json().catch(() => ({}));
+      return { 
+        success: false, 
+        message: errorData.message || 'تم تجاوز الحد المسموح من المحاولات. يرجى الانتظار قليلاً والمحاولة مرة أخرى.' 
+      };
+    }
+
+    if (!response.ok) {
+      // If response is not ok, try to get error message
+      let errorMessage = 'خطأ في الاتصال بالخادم';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+      } catch (e) {
+        // If can't parse JSON, use default message
+        errorMessage = `خطأ في الاتصال بالخادم (Status: ${response.status})`;
+      }
+      return { success: false, message: errorMessage };
+    }
 
     const data = await response.json();
 
@@ -40,7 +68,8 @@ export const login = async (email, password) => {
 
     return { success: false, message: data.message || 'فشل تسجيل الدخول' };
   } catch (error) {
-    return { success: false, message: 'خطأ في الاتصال بالخادم' };
+    console.error('Login error:', error);
+    return { success: false, message: `خطأ في الاتصال بالخادم: ${error.message}` };
   }
 };
 
@@ -79,4 +108,3 @@ export const authenticatedFetch = async (url, options = {}) => {
 
   return response;
 };
-

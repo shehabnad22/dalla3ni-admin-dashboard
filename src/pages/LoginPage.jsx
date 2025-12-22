@@ -44,9 +44,10 @@ export default function LoginPage({ onLoginSuccess = null }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="shehab.nad22@gmail.com"
               required
               disabled={loading}
+              autoComplete="off"
+              placeholder=""
             />
           </div>
 
@@ -56,9 +57,10 @@ export default function LoginPage({ onLoginSuccess = null }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
               required
               disabled={loading}
+              autoComplete="off"
+              placeholder=""
             />
           </div>
 
