@@ -69,6 +69,25 @@ export default function DriversPage() {
     }
   };
 
+  const handleUnblock = async (driverId) => {
+    if (!window.confirm('هل تريد رفع الحظر عن هذا السائق؟')) return;
+    try {
+      const res = await authenticatedFetch(`${API_URL}/admin/drivers/${driverId}/unblock`, {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('تم رفع الحظر بنجاح');
+        fetchDrivers();
+      } else {
+        alert(data.message || 'حدث خطأ');
+      }
+    } catch (error) {
+      alert('حدث خطأ في الاتصال');
+    }
+  };
+
   const filteredDrivers = drivers.filter(d => {
     if (filter === 'all') return true;
     if (filter === 'online') return d.isAvailable;
