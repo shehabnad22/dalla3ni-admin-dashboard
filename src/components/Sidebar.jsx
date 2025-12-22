@@ -4,6 +4,7 @@ import './Sidebar.css';
 const menuItems = [
   { id: 'dashboard', label: 'لوحة التحكم', icon: '📊' },
   { id: 'orders', label: 'الطلبات', icon: '📦' },
+  { id: 'customers', label: 'الزبائن', icon: '👥' },
   { id: 'drivers', label: 'السائقين', icon: '🛵' },
   { id: 'invoices', label: 'الفواتير', icon: '🧾' },
   { id: 'disputes', label: 'النزاعات', icon: '⚠️' },

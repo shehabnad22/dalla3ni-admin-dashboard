@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import OrdersPage from './pages/OrdersPage';
+import CustomersPage from './pages/CustomersPage';
 import DriversPage from './pages/DriversPage';
 import InvoicesPage from './pages/InvoicesPage';
 import DisputesPage from './pages/DisputesPage';
@@ -34,6 +35,7 @@ function App() {
     switch (currentPage) {
       case 'dashboard': return <DashboardPage />;
       case 'orders': return <OrdersPage />;
+      case 'customers': return <CustomersPage />;
       case 'drivers': return <DriversPage />;
       case 'invoices': return <InvoicesPage />;
       case 'disputes': return <DisputesPage />;
