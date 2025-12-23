@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_URL } from '../config/api';
+import { API_URL, BASE_URL } from '../config/api';
 import { authenticatedFetch } from '../auth/auth';
 
 export default function DriversPage() {
@@ -217,7 +217,7 @@ export default function DriversPage() {
             <div className="image-preview-group">
               <div className="image-card">
                 {selectedDriver.idImage ? (
-                  <img src={selectedDriver.idImage} alt="ID" />
+                  <img src={selectedDriver.idImage.startsWith('http') ? selectedDriver.idImage : `${BASE_URL}/${selectedDriver.idImage}`} alt="ID" />
                 ) : (
                   <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>لا توجد صورة</div>
                 )}
@@ -225,7 +225,7 @@ export default function DriversPage() {
               </div>
               <div className="image-card">
                 {selectedDriver.motorImage ? (
-                  <img src={selectedDriver.motorImage} alt="Bike" />
+                  <img src={selectedDriver.motorImage.startsWith('http') ? selectedDriver.motorImage : `${BASE_URL}/${selectedDriver.motorImage}`} alt="Bike" />
                 ) : (
                   <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>لا توجد صورة</div>
                 )}

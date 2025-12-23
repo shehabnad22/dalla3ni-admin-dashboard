@@ -31,6 +31,44 @@ export default function CustomersPage() {
     }
   };
 
+  const handleBlockCustomer = async (userId) => {
+    if (!window.confirm('هل أنت متأكد من حظر هذا الزبون؟')) return;
+    try {
+      const res = await authenticatedFetch(`${API_URL}/admin/users/${userId}/block`, {
+        method: 'POST',
+        body: JSON.stringify({ reason: 'حظر يدوي من الإدارة' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('تم حظر الزبون بنجاح');
+        fetchCustomers();
+      } else {
+        alert(data.message || 'حدث خطأ ما');
+      }
+    } catch (error) {
+      alert('خطأ في الاتصال بالسيرفر');
+    }
+  };
+
+  const handleUnblockCustomer = async (userId) => {
+    if (!window.confirm('هل تريد رفع الحظر عن هذا الزبون؟')) return;
+    try {
+      const res = await authenticatedFetch(`${API_URL}/admin/users/${userId}/unblock`, {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('تم رفع الحظر بنجاح');
+        fetchCustomers();
+      } else {
+        alert(data.message || 'حدث خطأ ما');
+      }
+    } catch (error) {
+      alert('خطأ في الاتصال بالسيرفر');
+    }
+  };
+
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -45,6 +83,8 @@ export default function CustomersPage() {
     if (filter === 'all') return true;
     if (filter === 'with-orders') return customer.ordersCount > 0;
     if (filter === 'no-orders') return customer.ordersCount === 0;
+    if (filter === 'blocked') return customer.isBlocked;
+    if (filter === 'active') return !customer.isBlocked;
     return true;
   });
 
@@ -71,6 +111,8 @@ export default function CustomersPage() {
           <option value="all">جميع الزبائن</option>
           <option value="with-orders">زبائن لديهم طلبات</option>
           <option value="no-orders">زبائن بدون طلبات</option>
+          <option value="active">زبائن نشطين</option>
+          <option value="blocked">زبائن محظورين</option>
         </select>
         <select value={sort} onChange={e => setSort(e.target.value)}>
           <option value="newest">الأحدث أولاً</option>
@@ -78,9 +120,9 @@ export default function CustomersPage() {
           <option value="name-asc">الاسم (أ-ي)</option>
           <option value="name-desc">الاسم (ي-أ)</option>
         </select>
-        <input 
-          type="text" 
-          placeholder="بحث بالاسم أو الهاتف..." 
+        <input
+          type="text"
+          placeholder="بحث بالاسم أو الهاتف..."
           value={searchTerm}
           onChange={handleSearch}
         />
@@ -95,12 +137,14 @@ export default function CustomersPage() {
               <th>رقم الهاتف</th>
               <th>عدد الطلبات</th>
               <th>تاريخ التسجيل</th>
+              <th>الحالة</th>
+              <th>إجراءات</th>
             </tr>
           </thead>
           <tbody>
             {filteredCustomers.length === 0 ? (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>
+                <td colSpan="7" style={{ textAlign: 'center', padding: '40px' }}>
                   <p>لا يوجد زبائن</p>
                 </td>
               </tr>
@@ -121,13 +165,27 @@ export default function CustomersPage() {
                     <span className="badge badge-info">{customer.ordersCount || 0}</span>
                   </td>
                   <td>
-                    {customer.registerTime 
+                    {customer.registerTime
                       ? new Date(customer.registerTime).toLocaleDateString('ar', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
                       : '-'}
+                  </td>
+                  <td>
+                    {customer.isBlocked ? (
+                      <span className="badge badge-danger">محظور</span>
+                    ) : (
+                      <span className="badge badge-success">نشط</span>
+                    )}
+                  </td>
+                  <td>
+                    {!customer.isBlocked ? (
+                      <button className="btn btn-sm btn-danger" onClick={() => handleBlockCustomer(customer.id)}>حظر</button>
+                    ) : (
+                      <button className="btn btn-sm btn-primary" onClick={() => handleUnblockCustomer(customer.id)}>رفع الحظر</button>
+                    )}
                   </td>
                 </tr>
               ))
@@ -153,7 +211,7 @@ export default function CustomersPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

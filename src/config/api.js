@@ -2,7 +2,9 @@
 // Uses REACT_APP_API_URL environment variable
 // Defaults to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+const BASE_URL = API_BASE_URL.replace('/api', '');
 
+export { API_BASE_URL, BASE_URL };
 export const API_URL = API_BASE_URL;
 
 // Helper function to build full API endpoint
