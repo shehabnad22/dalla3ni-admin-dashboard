@@ -5,6 +5,7 @@ import { authenticatedFetch } from '../auth/auth';
 export default function DriversPage() {
   const [drivers, setDrivers] = useState([]);
   const [filter, setFilter] = useState('all');
+  const [selectedDriver, setSelectedDriver] = useState(null);
 
   useEffect(() => {
     fetchDrivers();
@@ -158,13 +159,91 @@ export default function DriversPage() {
                       رفع الحظر
                     </button>
                   )}
-                  <button className="btn btn-sm" style={{ marginRight: 8 }}>عرض</button>
+                  <button className="btn btn-sm" style={{ marginRight: 8 }} onClick={() => setSelectedDriver(driver)}>عرض</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {selectedDriver && (
+        <div className="modal-overlay" onClick={() => setSelectedDriver(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>تفاصيل السائق</h2>
+              <button className="modal-close" onClick={() => setSelectedDriver(null)}>&times;</button>
+            </div>
+
+            <div className="detail-grid">
+              <div className="detail-item">
+                <span className="detail-label">الاسم الكامل</span>
+                <span className="detail-value">{selectedDriver.User?.name || '-'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">رقم الهاتف</span>
+                <span className="detail-value">{selectedDriver.User?.phone || '-'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">رقم اللوحة</span>
+                <span className="detail-value">{selectedDriver.plateNumber || '-'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">موديل الدراجة</span>
+                <span className="detail-value">{selectedDriver.bikeModel || '-'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">ساعات العمل</span>
+                <span className="detail-value">
+                  {selectedDriver.workStartTime || '-'} إلى {selectedDriver.workEndTime || '-'}
+                </span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">الحالة</span>
+                <span className="detail-value">{getStatusBadge(selectedDriver)}</span>
+              </div>
+            </div>
+
+            <div className="detail-item">
+              <span className="detail-label">مناطق العمل</span>
+              <div className="working-areas">
+                {(Array.isArray(selectedDriver.workingAreas) ? selectedDriver.workingAreas : []).map((area, i) => (
+                  <span key={i} className="area-tag">{area}</span>
+                ))}
+                {(!selectedDriver.workingAreas || selectedDriver.workingAreas.length === 0) && <span>-</span>}
+              </div>
+            </div>
+
+            <div className="image-preview-group">
+              <div className="image-card">
+                {selectedDriver.idImage ? (
+                  <img src={selectedDriver.idImage} alt="ID" />
+                ) : (
+                  <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>لا توجد صورة</div>
+                )}
+                <div className="image-label">صورة الهوية</div>
+              </div>
+              <div className="image-card">
+                {selectedDriver.motorImage ? (
+                  <img src={selectedDriver.motorImage} alt="Bike" />
+                ) : (
+                  <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>لا توجد صورة</div>
+                )}
+                <div className="image-label">صورة الدراجة</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 24, display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+              <button className="btn" onClick={() => setSelectedDriver(null)}>إغلاق</button>
+              {(!selectedDriver.isApproved || selectedDriver.accountStatus === 'PENDING_REVIEW') && (
+                <button className="btn btn-success" onClick={() => { handleApprove(selectedDriver.id); setSelectedDriver(null); }}>
+                  موافقة على الطلب
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
