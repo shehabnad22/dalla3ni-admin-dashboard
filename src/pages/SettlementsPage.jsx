@@ -70,7 +70,7 @@ export default function SettlementsPage() {
     const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    
+
     link.setAttribute('href', url);
     link.setAttribute('download', `settlements_${selectedDate}.csv`);
     link.style.visibility = 'hidden';
@@ -124,7 +124,7 @@ export default function SettlementsPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div>
             <div style={{ fontSize: '14px', opacity: 0.8 }}>إجمالي المستحقات</div>
-            <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{settlements.totalPending?.toFixed(2)} دينار</div>
+            <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{settlements.totalPending?.toFixed(2)} ل.س</div>
           </div>
           <div>
             <div style={{ fontSize: '14px', opacity: 0.8 }}>عدد السائقين</div>
@@ -155,29 +155,29 @@ export default function SettlementsPage() {
                 </td>
                 <td style={{ padding: '16px' }}>{driver.phone}</td>
                 <td style={{ padding: '16px' }}>
-                  <span style={{ 
-                    fontWeight: 'bold', 
-                    color: parseFloat(driver.pendingSettlement) >= 50 ? '#e53935' : '#333' 
+                  <span style={{
+                    fontWeight: 'bold',
+                    color: parseFloat(driver.pendingSettlement) >= 50 ? '#e53935' : '#333'
                   }}>
-                    {parseFloat(driver.pendingSettlement).toFixed(2)} دينار
+                    {parseFloat(driver.pendingSettlement).toFixed(2)} ل.س
                   </span>
                 </td>
                 <td style={{ padding: '16px' }}>
                   {driver.isBlocked ? (
-                    <span style={{ 
-                      background: '#ffebee', 
-                      color: '#c62828', 
-                      padding: '4px 12px', 
+                    <span style={{
+                      background: '#ffebee',
+                      color: '#c62828',
+                      padding: '4px 12px',
                       borderRadius: '20px',
                       fontSize: '12px'
                     }}>
                       محظور ❌
                     </span>
                   ) : (
-                    <span style={{ 
-                      background: '#e8f5e9', 
-                      color: '#2e7d32', 
-                      padding: '4px 12px', 
+                    <span style={{
+                      background: '#e8f5e9',
+                      color: '#2e7d32',
+                      padding: '4px 12px',
                       borderRadius: '20px',
                       fontSize: '12px'
                     }}>

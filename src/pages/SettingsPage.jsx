@@ -66,10 +66,10 @@ export default function SettingsPage() {
 
       <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <h2 style={{ marginBottom: '24px' }}>إعدادات العمولة</h2>
-        
+
         <div style={{ marginBottom: '24px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-            قيمة العمولة (دينار)
+            قيمة العمولة (ل.س)
           </label>
           <input
             type="number"
@@ -85,7 +85,7 @@ export default function SettingsPage() {
         </div>
 
         <h2 style={{ marginBottom: '24px', marginTop: '32px' }}>Feature Flags</h2>
-        
+
         <div style={{ marginBottom: '24px' }}>
           <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <input
@@ -102,7 +102,7 @@ export default function SettingsPage() {
         </div>
 
         <h2 style={{ marginBottom: '24px', marginTop: '32px' }}>إعدادات التسوية اليومية</h2>
-        
+
         <div style={{ marginBottom: '24px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
             وقت التسوية اليومية

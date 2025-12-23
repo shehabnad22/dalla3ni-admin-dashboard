@@ -83,12 +83,12 @@ export default function InvoicesPage() {
         }} onClick={() => setSelectedInvoice(null)}>
           <div style={{ background: 'white', padding: 24, borderRadius: 16, maxWidth: 500 }}>
             <h3>فاتورة #{selectedInvoice.id}</h3>
-            <div style={{ 
-              width: 400, 
-              height: 300, 
-              background: '#f5f5f5', 
-              display: 'flex', 
-              alignItems: 'center', 
+            <div style={{
+              width: 400,
+              height: 300,
+              background: '#f5f5f5',
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 8,
               marginTop: 16,
@@ -96,7 +96,7 @@ export default function InvoicesPage() {
               🧾 صورة الفاتورة
             </div>
             <div style={{ marginTop: 16 }}>
-              <p><strong>المبلغ:</strong> {selectedInvoice.amount.toFixed(2)} دينار</p>
+              <p><strong>المبلغ:</strong> {selectedInvoice.amount.toFixed(2)} ل.س</p>
               <p><strong>السائق:</strong> {selectedInvoice.driver}</p>
             </div>
           </div>

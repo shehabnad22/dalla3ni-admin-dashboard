@@ -73,15 +73,15 @@ export default function OrdersPage() {
           <option value="CANCELED">ملغية</option>
           <option value="DISPUTE">نزاعات</option>
         </select>
-        <input 
-          type="date" 
+        <input
+          type="date"
           value={dateFilter}
           onChange={e => setDateFilter(e.target.value)}
           style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #ddd' }}
         />
-        <input 
-          type="text" 
-          placeholder="بحث برقم الطلب أو المحتوى..." 
+        <input
+          type="text"
+          placeholder="بحث برقم الطلب أو المحتوى..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #ddd', flex: 1, minWidth: '200px' }}
@@ -117,14 +117,14 @@ export default function OrdersPage() {
                 </td>
                 <td>{new Date(order.createdAt).toLocaleString('ar')}</td>
                 <td>
-                  <button 
+                  <button
                     className="btn btn-sm btn-primary"
                     onClick={() => setSelectedOrder(order)}
                   >
                     عرض
                   </button>
                   {order.invoiceImageUrl && (
-                    <button 
+                    <button
                       className="btn btn-sm btn-success"
                       style={{ marginRight: '8px' }}
                       onClick={() => window.open(order.invoiceImageUrl, '_blank')}
@@ -167,21 +167,21 @@ export default function OrdersPage() {
               <p><strong>الزبون:</strong> {selectedOrder.customer?.name} ({selectedOrder.customer?.phone})</p>
               <p><strong>الطلب:</strong> {selectedOrder.itemsText}</p>
               <p><strong>السائق:</strong> {selectedOrder.Driver?.User?.name || '-'}</p>
-              <p><strong>السعر:</strong> {parseFloat(selectedOrder.estimatedPrice || 0).toFixed(2)} دينار</p>
-              <p><strong>رسوم التوصيل:</strong> {parseFloat(selectedOrder.deliveryFee || 0).toFixed(2)} دينار</p>
+              <p><strong>السعر:</strong> {parseFloat(selectedOrder.estimatedPrice || 0).toFixed(2)} ل.س</p>
+              <p><strong>رسوم التوصيل:</strong> {parseFloat(selectedOrder.deliveryFee || 0).toFixed(2)} ل.س</p>
               <p><strong>الحالة:</strong> {statusLabels[selectedOrder.status]?.label}</p>
               {selectedOrder.invoiceImageUrl && (
                 <div style={{ marginTop: '16px' }}>
                   <strong>صورة الفاتورة:</strong>
-                  <img 
-                    src={selectedOrder.invoiceImageUrl} 
-                    alt="Invoice" 
+                  <img
+                    src={selectedOrder.invoiceImageUrl}
+                    alt="Invoice"
                     style={{ maxWidth: '100%', marginTop: '8px', borderRadius: '8px' }}
                   />
                 </div>
               )}
             </div>
-            <button 
+            <button
               onClick={() => setSelectedOrder(null)}
               style={{ marginTop: '16px', padding: '8px 24px', background: '#6C63FF', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
             >

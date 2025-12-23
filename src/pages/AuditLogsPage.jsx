@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 export default function AuditLogsPage() {
   const [logs] = useState([
-    { id: '1', action: 'settlement_paid', admin: 'المدير', target: 'أحمد محمد', details: 'تسوية بقيمة 25.50 دينار', createdAt: '2025-11-26T12:00:00' },
-    { id: '2', action: 'driver_blocked', admin: 'النظام', target: 'خالد علي', details: 'حظر تلقائي - ديون متراكمة 52.50 دينار', createdAt: '2025-11-26T00:00:00' },
+    { id: '1', action: 'settlement_paid', admin: 'المدير', target: 'أحمد محمد', details: 'تسوية بقيمة 25.50 ل.س', createdAt: '2025-11-26T12:00:00' },
+    { id: '2', action: 'driver_blocked', admin: 'النظام', target: 'خالد علي', details: 'حظر تلقائي - ديون متراكمة 52.50 ل.س', createdAt: '2025-11-26T00:00:00' },
     { id: '3', action: 'driver_unblocked', admin: 'المدير', target: 'محمود سعيد', details: 'رفع الحظر بعد التسوية', createdAt: '2025-11-25T16:30:00' },
     { id: '4', action: 'driver_approved', admin: 'المدير', target: 'عمر حسن', details: 'تمت الموافقة على طلب التسجيل', createdAt: '2025-11-25T14:00:00' },
     { id: '5', action: 'dispute_resolved', admin: 'المدير', target: 'نزاع #3', details: 'تم تحذير السائق', createdAt: '2025-11-25T11:00:00' },
@@ -55,11 +55,11 @@ export default function AuditLogsPage() {
               .map(log => (
                 <tr key={log.id}>
                   <td>
-                    <span style={{ 
-                      display: 'inline-flex', 
-                      alignItems: 'center', 
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
                       gap: 8,
-                      color: actionLabels[log.action]?.color 
+                      color: actionLabels[log.action]?.color
                     }}>
                       <span>{actionLabels[log.action]?.icon}</span>
                       <span>{actionLabels[log.action]?.label}</span>
