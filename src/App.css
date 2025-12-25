@@ -47,7 +47,7 @@ body {
 }
 
 .stat-card.primary {
-  background: linear-gradient(135deg, #6C63FF, #4A42D1);
+  background: linear-gradient(135deg, #FF6B35, #FF8C42);
   color: white;
 }
 
@@ -121,12 +121,12 @@ tr:hover {
 }
 
 .btn-primary {
-  background: #6C63FF;
+  background: #FF6B35;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #5a52e0;
+  background: #FF5722;
 }
 
 .btn-success {
@@ -170,7 +170,7 @@ tr:hover {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #6C63FF;
+  background: #FF6B35;
   color: white;
   display: flex;
   align-items: center;
@@ -305,8 +305,8 @@ tr:hover {
 }
 
 .area-tag {
-  background: #f0f0ff;
-  color: #6C63FF;
+  background: #fff3e0;
+  color: #FF6B35;
   padding: 4px 12px;
   border-radius: 16px;
   font-size: 12px;

@@ -115,7 +115,7 @@ export default function SettlementsPage() {
 
       {/* Summary Card */}
       <div style={{
-        background: 'linear-gradient(135deg, #6C63FF, #4A42D1)',
+        background: 'linear-gradient(135deg, #FF6B35, #FF8C42)',
         borderRadius: '16px',
         padding: '24px',
         color: 'white',

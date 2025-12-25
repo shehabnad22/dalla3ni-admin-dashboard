@@ -183,7 +183,7 @@ export default function OrdersPage() {
             </div>
             <button
               onClick={() => setSelectedOrder(null)}
-              style={{ marginTop: '16px', padding: '8px 24px', background: '#6C63FF', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+              style={{ marginTop: '16px', padding: '8px 24px', background: '#FF6B35', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
             >
               إغلاق
             </button>

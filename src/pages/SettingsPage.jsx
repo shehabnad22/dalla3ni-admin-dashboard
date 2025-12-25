@@ -122,7 +122,7 @@ export default function SettingsPage() {
           onClick={handleSave}
           disabled={loading}
           style={{
-            background: '#6C63FF',
+            background: '#FF6B35',
             color: 'white',
             border: 'none',
             padding: '12px 32px',

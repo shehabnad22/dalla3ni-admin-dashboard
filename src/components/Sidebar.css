@@ -61,7 +61,7 @@
 }
 
 .nav-item.active {
-  background: #6C63FF;
+  background: #FF6B35;
   color: white;
 }
 
@@ -83,7 +83,7 @@
 .admin-avatar {
   width: 40px;
   height: 40px;
-  background: #6C63FF;
+  background: #FF6B35;
   border-radius: 50%;
   display: flex;
   align-items: center;
