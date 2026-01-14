@@ -115,7 +115,15 @@ export default function OrdersPage() {
                     {statusLabels[order.status]?.label || order.status}
                   </span>
                 </td>
-                <td>{new Date(order.createdAt).toLocaleString('ar')}</td>
+                <td>
+                  {order.createdAt ? new Date(order.createdAt).toLocaleString('ar-EG', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  }) : 'غير متوفر'}
+                </td>
                 <td>
                   <button
                     className="btn btn-sm btn-primary"
@@ -127,9 +135,9 @@ export default function OrdersPage() {
                     <button
                       className="btn btn-sm btn-success"
                       style={{ marginRight: '8px' }}
-                      onClick={() => window.open(order.invoiceImageUrl, '_blank')}
+                      onClick={() => window.open(order.invoiceImageUrl.startsWith('http') ? order.invoiceImageUrl : `${BASE_URL}/${order.invoiceImageUrl}`, '_blank')}
                     >
-                      📄 فاتورة
+                      <i className="fas fa-file-invoice"></i> فاتورة
                     </button>
                   )}
                 </td>

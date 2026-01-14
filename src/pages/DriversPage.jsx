@@ -129,7 +129,9 @@ export default function DriversPage() {
               <tr key={driver.id}>
                 <td>
                   <div className="flex">
-                    <div className="avatar">{(driver.User?.name || 'س')[0]}</div>
+                    <div className="avatar" style={{ background: driver.isAvailable ? '#4CAF50' : '#FF6B35' }}>
+                      {(driver.User?.name || 'س')[0]}
+                    </div>
                     <div>
                       <div>{driver.User?.name || '-'}</div>
                       <div className="text-muted">{driver.User?.phone || '-'}</div>
@@ -146,20 +148,22 @@ export default function DriversPage() {
                 <td>
                   {(!driver.isApproved || driver.accountStatus === 'PENDING_REVIEW') && (
                     <button className="btn btn-sm btn-success" onClick={() => handleApprove(driver.id)}>
-                      موافقة
+                      <i className="fas fa-check"></i> موافقة
                     </button>
                   )}
                   {!driver.isBlocked && driver.isApproved && (
                     <button className="btn btn-sm btn-danger" onClick={() => handleBlock(driver.id)}>
-                      حظر
+                      <i className="fas fa-ban"></i> حظر
                     </button>
                   )}
                   {driver.isBlocked && (
-                    <button className="btn btn-sm btn-primary" onClick={() => handleUnblock(driver.id)}>
-                      رفع الحظر
+                    <button className="btn btn-sm btn-info" onClick={() => handleUnblock(driver.id)} style={{ background: '#2196F3', color: 'white' }}>
+                      <i className="fas fa-unlock"></i> رفع الحظر
                     </button>
                   )}
-                  <button className="btn btn-sm" style={{ marginRight: 8 }} onClick={() => setSelectedDriver(driver)}>عرض</button>
+                  <button className="btn btn-sm btn-primary" style={{ marginRight: 8 }} onClick={() => setSelectedDriver(driver)}>
+                    <i className="fas fa-eye"></i> عرض
+                  </button>
                 </td>
               </tr>
             ))}
@@ -216,20 +220,38 @@ export default function DriversPage() {
 
             <div className="image-preview-group">
               <div className="image-card">
-                {selectedDriver.idImage ? (
-                  <img src={selectedDriver.idImage.startsWith('http') ? selectedDriver.idImage : `${BASE_URL}/${selectedDriver.idImage}`} alt="ID" />
-                ) : (
-                  <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>لا توجد صورة</div>
-                )}
                 <div className="image-label">صورة الهوية</div>
+                {selectedDriver.idImage ? (
+                  <img
+                    src={selectedDriver.idImage.startsWith('http') ? selectedDriver.idImage : `${BASE_URL}/${selectedDriver.idImage}`}
+                    alt="ID"
+                    style={{ width: '100%', height: 'auto', borderRadius: '8px', marginTop: '8px' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div style={{ height: 150, background: '#f5f5f5', display: selectedDriver.idImage ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', marginTop: '8px' }}>
+                  {selectedDriver.idImage ? 'فشل تحميل الصورة' : 'لا توجد صورة'}
+                </div>
               </div>
               <div className="image-card">
-                {selectedDriver.motorImage ? (
-                  <img src={selectedDriver.motorImage.startsWith('http') ? selectedDriver.motorImage : `${BASE_URL}/${selectedDriver.motorImage}`} alt="Bike" />
-                ) : (
-                  <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>لا توجد صورة</div>
-                )}
                 <div className="image-label">صورة الدراجة</div>
+                {selectedDriver.motorImage ? (
+                  <img
+                    src={selectedDriver.motorImage.startsWith('http') ? selectedDriver.motorImage : `${BASE_URL}/${selectedDriver.motorImage}`}
+                    alt="Bike"
+                    style={{ width: '100%', height: 'auto', borderRadius: '8px', marginTop: '8px' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div style={{ height: 150, background: '#f5f5f5', display: selectedDriver.motorImage ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', marginTop: '8px' }}>
+                  {selectedDriver.motorImage ? 'فشل تحميل الصورة' : 'لا توجد صورة'}
+                </div>
               </div>
             </div>
 

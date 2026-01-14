@@ -43,7 +43,15 @@ export default function InvoicesPage() {
                 <td>#{invoice.orderId}</td>
                 <td>{invoice.driver}</td>
                 <td>{invoice.amount.toFixed(2)} د</td>
-                <td>{new Date(invoice.uploadedAt).toLocaleString('ar')}</td>
+                <td>
+                  {invoice.uploadedAt ? new Date(invoice.uploadedAt).toLocaleString('ar-EG', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  }) : 'غير متوفر'}
+                </td>
                 <td>
                   {invoice.verified ? (
                     <span className="badge badge-success">موثقة ✓</span>
@@ -53,11 +61,11 @@ export default function InvoicesPage() {
                 </td>
                 <td>
                   <button className="btn btn-sm btn-primary" onClick={() => setSelectedInvoice(invoice)}>
-                    عرض الصورة
+                    <i className="fas fa-eye"></i> عرض الصورة
                   </button>
                   {!invoice.verified && (
                     <button className="btn btn-sm btn-success" style={{ marginRight: 8 }}>
-                      توثيق
+                      <i className="fas fa-check-double"></i> توثيق
                     </button>
                   )}
                 </td>
