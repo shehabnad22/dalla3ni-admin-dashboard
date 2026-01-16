@@ -4,16 +4,19 @@ import { authenticatedFetch } from '../auth/auth';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
-    commissionAmount: 2500,
+    commissionAmount: 1.5,
     storesEnabled: false,
-    dailySettlementTime: '23:59',
+    pointsEnabled: false,
+    pointsPerOrder: 10,
+    pointsForFreeOrder: 100,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchSettings = async () => {
@@ -21,123 +24,158 @@ export default function SettingsPage() {
       const res = await authenticatedFetch(`${API_URL}/admin/settings`);
       const data = await res.json();
       if (data.success) {
-        setSettings(data.settings || settings);
+        setSettings(data.settings);
       }
-    } catch (error) {
-      console.error('Error fetching settings:', error);
+    } catch (err) {
+      console.error('Error fetching settings:', err);
+      setError('فشل تحميل الإعدادات');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSave = async () => {
-    setLoading(true);
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setSettings(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
     setMessage('');
+    setError('');
+
     try {
       const res = await authenticatedFetch(`${API_URL}/admin/settings`, {
         method: 'PUT',
-        body: JSON.stringify(settings),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings)
       });
       const data = await res.json();
       if (data.success) {
-        setMessage('تم حفظ الإعدادات بنجاح');
-        setTimeout(() => setMessage(''), 3000);
+        setMessage('تم تحديث الإعدادات بنجاح');
       } else {
-        setMessage('حدث خطأ في الحفظ');
+        setError(data.message || 'فشل التحديث');
       }
-    } catch (error) {
-      setMessage('حدث خطأ في الحفظ');
+    } catch (err) {
+      console.error('Error saving settings:', err);
+      setError('فشل الاتصال بالخادم');
+    } finally {
+      setSaving(false);
     }
-    setLoading(false);
   };
 
+  if (loading) return <div className="text-center p-5">جاري التحميل...</div>;
+
   return (
-    <div style={{ padding: '24px', direction: 'rtl', fontFamily: 'Cairo, sans-serif' }}>
-      <h1 style={{ marginBottom: '24px' }}>الإعدادات</h1>
+    <div className="container-fluid p-4">
+      <h1 className="page-title mb-4">إعدادات النظام</h1>
 
-      {message && (
-        <div style={{
-          padding: '12px 16px',
-          background: message.includes('نجاح') ? '#4caf50' : '#e53935',
-          color: 'white',
-          borderRadius: '8px',
-          marginBottom: '24px',
-        }}>
-          {message}
+      {message && <div className="alert alert-success">{message}</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      <div className="row">
+        <div className="col-md-8">
+          <form onSubmit={handleSubmit}>
+            {/* General Settings */}
+            <div className="card mb-4 shadow-sm">
+              <div className="card-header bg-white font-weight-bold">
+                <i className="fas fa-cogs ml-2"></i> إعدادات عامة
+              </div>
+              <div className="card-body">
+                <div className="form-group mb-3">
+                  <label>قيمة العمولة (ل.س)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    name="commissionAmount"
+                    value={settings.commissionAmount}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                  <small className="text-muted">المبلغ المقتطع من السائق عن كل طلب</small>
+                </div>
+
+                <div className="form-group form-check">
+                  <input
+                    type="checkbox"
+                    name="storesEnabled"
+                    checked={settings.storesEnabled}
+                    onChange={handleChange}
+                    className="form-check-input"
+                    id="storesCheck"
+                  />
+                  <label className="form-check-label" htmlFor="storesCheck">
+                    تفعيل نظام المتاجر
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Points System Settings */}
+            <div className="card mb-4 shadow-sm" style={{ borderLeft: '4px solid #FF6B35' }}>
+              <div className="card-header bg-white font-weight-bold text-orange">
+                <i className="fas fa-gift ml-2"></i> نظام النقاط والمكافآت
+              </div>
+              <div className="card-body">
+                <div className="form-group form-check mb-4">
+                  <input
+                    type="checkbox"
+                    name="pointsEnabled"
+                    checked={settings.pointsEnabled}
+                    onChange={handleChange}
+                    className="form-check-input"
+                    id="pointsCheck"
+                  />
+                  <label className="form-check-label font-weight-bold" htmlFor="pointsCheck">
+                    تفعيل نظام النقاط
+                  </label>
+                  <small className="d-block text-muted">عند التفعيل، سيكسب الزبائن نقاطاً ويمكنهم استخدامها لطلبات مجانية.</small>
+                </div>
+
+                {settings.pointsEnabled && (
+                  <div className="pl-4 border-right border-secondary">
+                    <div className="form-group mb-3">
+                      <label>نقاط مكتسبة لكل طلب</label>
+                      <input
+                        type="number"
+                        name="pointsPerOrder"
+                        value={settings.pointsPerOrder}
+                        onChange={handleChange}
+                        className="form-control"
+                      />
+                      <small className="text-muted">عدد النقاط التي يكسبها الزبون عند إكمال طلب</small>
+                    </div>
+
+                    <div className="form-group mb-3">
+                      <label>تكلفة الطلب المجاني (نقاط)</label>
+                      <input
+                        type="number"
+                        name="pointsForFreeOrder"
+                        value={settings.pointsForFreeOrder}
+                        onChange={handleChange}
+                        className="form-control"
+                      />
+                      <small className="text-muted">عدد النقاط المطلوبة للحصول على طلب مجاني</small>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg px-5"
+              disabled={saving}
+            >
+              {saving ? 'جاري الحفظ...' : 'حفظ التغييرات'}
+            </button>
+          </form>
         </div>
-      )}
-
-      <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ marginBottom: '24px' }}>إعدادات العمولة</h2>
-
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-            قيمة العمولة (ل.س)
-          </label>
-          <input
-            type="number"
-            value={settings.commissionAmount}
-            onChange={e => setSettings({ ...settings, commissionAmount: parseFloat(e.target.value) || 0 })}
-            style={{ width: '100%', maxWidth: '300px', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
-            min="0"
-            step="0.01"
-          />
-          <p style={{ marginTop: '8px', color: '#666', fontSize: '14px' }}>
-            قيمة العمولة التي تُضاف لكل طلب مكتمل
-          </p>
-        </div>
-
-        <h2 style={{ marginBottom: '24px', marginTop: '32px' }}>Feature Flags</h2>
-
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={settings.storesEnabled}
-              onChange={e => setSettings({ ...settings, storesEnabled: e.target.checked })}
-              style={{ marginLeft: '12px', width: '20px', height: '20px' }}
-            />
-            <span style={{ fontWeight: 'bold' }}>تفعيل المتاجر (stores_enabled)</span>
-          </label>
-          <p style={{ marginTop: '8px', color: '#666', fontSize: '14px', marginRight: '32px' }}>
-            تفعيل ميزة المتاجر في التطبيق
-          </p>
-        </div>
-
-        <h2 style={{ marginBottom: '24px', marginTop: '32px' }}>إعدادات التسوية اليومية</h2>
-
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-            وقت التسوية اليومية
-          </label>
-          <input
-            type="time"
-            value={settings.dailySettlementTime}
-            onChange={e => setSettings({ ...settings, dailySettlementTime: e.target.value })}
-            style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
-          />
-          <p style={{ marginTop: '8px', color: '#666', fontSize: '14px' }}>
-            الوقت الذي يتم فيه فحص المستحقات وحظر السائقين
-          </p>
-        </div>
-
-        <button
-          onClick={handleSave}
-          disabled={loading}
-          style={{
-            background: '#FF6B35',
-            color: 'white',
-            border: 'none',
-            padding: '12px 32px',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.6 : 1,
-          }}
-        >
-          {loading ? 'جاري الحفظ...' : 'حفظ الإعدادات'}
-        </button>
       </div>
     </div>
   );
 }
-

@@ -1,15 +1,16 @@
 .login-page {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%) !important;
+  /* Dark Premium Background */
   padding: 20px;
   position: relative;
   overflow: hidden;
 }
 
-/* Background Pattern Overlay */
+/* Orange Accent Overlay */
 .login-page::before {
   content: '';
   position: absolute;
@@ -17,23 +18,23 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image:
-    radial-gradient(circle at 10% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 20%),
-    radial-gradient(circle at 90% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 20%);
+  background: radial-gradient(circle at top right, rgba(255, 107, 53, 0.2), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(255, 107, 53, 0.2), transparent 40%) !important;
   pointer-events: none;
 }
 
 .login-container {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px);
   border-radius: 24px;
   padding: 48px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transform: translateY(0);
   transition: transform 0.3s ease;
+  z-index: 10;
 }
 
 .login-container:hover {
@@ -48,7 +49,8 @@
 .login-logo {
   font-size: 56px;
   margin-bottom: 20px;
-  background: #FFF0E6;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8F50 100%) !important;
+  color: white !important;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -56,22 +58,24 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
-  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.2);
+  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4) !important;
 }
 
 .login-header h1 {
   margin: 0 0 12px 0;
-  color: #2d2d2d;
+  color: #1A1A2E !important;
   font-size: 32px;
   font-family: 'Cairo', sans-serif;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .login-header p {
   margin: 0;
-  color: #888;
+  color: #FF6B35 !important;
   font-size: 16px;
   font-family: 'Cairo', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .login-form {
@@ -96,24 +100,20 @@
 
 .form-group input {
   padding: 16px 20px;
-  border: 2px solid #f0f0f0;
+  border: 2px solid #EAEAEA !important;
   border-radius: 16px;
   font-size: 16px;
   transition: all 0.3s ease;
-  background: #fcfcfc;
+  background: #FAFAFA !important;
   font-family: 'Cairo', sans-serif;
-}
-
-.form-group input::placeholder {
-  color: transparent;
-  opacity: 0;
+  color: #333;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #FF6B35;
-  background: white;
-  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+  border-color: #FF6B35 !important;
+  background: white !important;
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15) !important;
 }
 
 .error-message {
@@ -133,8 +133,8 @@
 
 .login-button {
   padding: 18px;
-  background: linear-gradient(135deg, #FF6B35 0%, #FF8F50 100%);
-  color: white;
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8F50 100%) !important;
+  color: white !important;
   border: none;
   border-radius: 16px;
   font-size: 18px;
@@ -142,18 +142,18 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Cairo', sans-serif;
-  box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3) !important;
   margin-top: 8px;
 }
 
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 15px 30px rgba(255, 107, 53, 0.5) !important;
 }
 
 .login-button:disabled {
-  background: #ccc;
-  box-shadow: none;
+  background: #ccc !important;
+  box-shadow: none !important;
   cursor: not-allowed;
   transform: none;
 }

@@ -167,20 +167,42 @@ export default function OrdersPage() {
             overflow: 'auto',
           }} onClick={e => e.stopPropagation()}>
             <h2>تفاصيل الطلب #{selectedOrder.id?.slice(0, 8)}</h2>
-            <div style={{ marginTop: '16px' }}>
-              <p><strong>الزبون:</strong> {selectedOrder.customer?.name} ({selectedOrder.customer?.phone})</p>
-              <p><strong>الطلب:</strong> {selectedOrder.itemsText}</p>
-              <p><strong>السائق:</strong> {selectedOrder.Driver?.User?.name || '-'}</p>
-              <p><strong>السعر:</strong> {parseFloat(selectedOrder.estimatedPrice || 0).toFixed(2)} ل.س</p>
-              <p><strong>رسوم التوصيل:</strong> {parseFloat(selectedOrder.deliveryFee || 0).toFixed(2)} ل.س</p>
-              <p><strong>الحالة:</strong> {statusLabels[selectedOrder.status]?.label}</p>
+            <div style={{ marginTop: '16px', display: 'grid', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div style={{ background: '#f9f9f9', padding: '12px', borderRadius: '8px' }}>
+                  <h3 style={{ fontSize: '16px', marginBottom: '8px', color: '#666' }}>معلومات الطلب</h3>
+                  <p><strong>المحتوى:</strong> {selectedOrder.itemsText}</p>
+                  <p><strong>السعر المقدر:</strong> {parseFloat(selectedOrder.estimatedPrice || 0).toFixed(2)} ل.س</p>
+                  <p><strong>رسوم التوصيل:</strong> {parseFloat(selectedOrder.deliveryFee || 0).toFixed(2)} ل.س</p>
+                  <p><strong>الحالة:</strong> <span className={`badge ${statusLabels[selectedOrder.status]?.class}`}>{statusLabels[selectedOrder.status]?.label}</span></p>
+                  {selectedOrder.createdAt && selectedOrder.completedAt && (
+                    <p><strong>المدة المستغرقة:</strong> {Math.round((new Date(selectedOrder.completedAt) - new Date(selectedOrder.createdAt)) / 60000)} دقيقة</p>
+                  )}
+                </div>
+
+                <div style={{ background: '#f9f9f9', padding: '12px', borderRadius: '8px' }}>
+                  <h3 style={{ fontSize: '16px', marginBottom: '8px', color: '#666' }}>الأطراف</h3>
+                  <p><strong>الزبون:</strong> {selectedOrder.customer?.name} <br /><span className="text-muted">{selectedOrder.customer?.phone}</span></p>
+                  <hr style={{ margin: '8px 0', border: '0', borderTop: '1px solid #eee' }} />
+                  <p><strong>السائق:</strong> {selectedOrder.Driver?.User?.name || 'لم يتم التعيين'} <br /><span className="text-muted">{selectedOrder.Driver?.User?.phone}</span></p>
+                </div>
+              </div>
+
+              <div style={{ background: '#f9f9f9', padding: '12px', borderRadius: '8px' }}>
+                <h3 style={{ fontSize: '16px', marginBottom: '8px', color: '#666' }}>العناوين</h3>
+                <p><strong>من (الاستلام):</strong> {selectedOrder.pickupAddress || selectedOrder.deliveryAddress}</p>
+                <p><strong>إلى (التوصيل):</strong> {selectedOrder.deliveryAddress}</p>
+                {selectedOrder.area && <p><strong>المنطقة:</strong> {selectedOrder.area}</p>}
+              </div>
+
               {selectedOrder.invoiceImageUrl && (
-                <div style={{ marginTop: '16px' }}>
+                <div style={{ marginTop: '8px' }}>
                   <strong>صورة الفاتورة:</strong>
                   <img
-                    src={selectedOrder.invoiceImageUrl.startsWith('http') ? selectedOrder.invoiceImageUrl : `${BASE_URL}/${selectedOrder.invoiceImageUrl}`}
+                    src={selectedOrder.invoiceImageUrl.startsWith('http') ? selectedOrder.invoiceImageUrl : `${BASE_URL}/${selectedOrder.invoiceImageUrl.replace(/^uploads\//, '')}`}
                     alt="Invoice"
-                    style={{ maxWidth: '100%', marginTop: '8px', borderRadius: '8px' }}
+                    style={{ maxWidth: '100%', marginTop: '8px', borderRadius: '8px', maxHeight: '300px', objectFit: 'contain', background: '#eee' }}
+                    onClick={() => window.open(selectedOrder.invoiceImageUrl.startsWith('http') ? selectedOrder.invoiceImageUrl : `${BASE_URL}/${selectedOrder.invoiceImageUrl.replace(/^uploads\//, '')}`, '_blank')}
                   />
                 </div>
               )}

@@ -6,6 +6,7 @@ export default function DriversPage() {
   const [drivers, setDrivers] = useState([]);
   const [filter, setFilter] = useState('all');
   const [selectedDriver, setSelectedDriver] = useState(null);
+  const [enlargedImage, setEnlargedImage] = useState(null);
 
   useEffect(() => {
     fetchDrivers();
@@ -221,12 +222,16 @@ export default function DriversPage() {
 
             <div className="image-preview-group">
               <div className="image-card">
-                <div className="image-label">صورة الهوية</div>
+                <div className="image-label">صورة الهوية (اضغط للتكبير)</div>
                 {selectedDriver.idImage ? (
                   <img
                     src={selectedDriver.idImage.startsWith('http') ? selectedDriver.idImage : `${BASE_URL}/${selectedDriver.idImage}`}
                     alt="ID"
-                    style={{ width: '100%', height: 'auto', borderRadius: '8px', marginTop: '8px' }}
+                    style={{ width: '100%', height: '150px', objectFit: 'cover', cursor: 'pointer', borderRadius: '8px' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEnlargedImage(e.target.src);
+                    }}
                     onError={(e) => {
                       e.target.style.display = 'none';
                       e.target.nextSibling.style.display = 'flex';
@@ -238,12 +243,16 @@ export default function DriversPage() {
                 </div>
               </div>
               <div className="image-card">
-                <div className="image-label">صورة الدراجة</div>
+                <div className="image-label">صورة الدراجة (اضغط للتكبير)</div>
                 {selectedDriver.motorImage ? (
                   <img
                     src={selectedDriver.motorImage.startsWith('http') ? selectedDriver.motorImage : `${BASE_URL}/${selectedDriver.motorImage}`}
                     alt="Bike"
-                    style={{ width: '100%', height: 'auto', borderRadius: '8px', marginTop: '8px' }}
+                    style={{ width: '100%', height: '150px', objectFit: 'cover', cursor: 'pointer', borderRadius: '8px' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEnlargedImage(e.target.src);
+                    }}
                     onError={(e) => {
                       e.target.style.display = 'none';
                       e.target.nextSibling.style.display = 'flex';
@@ -264,6 +273,38 @@ export default function DriversPage() {
                 </button>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {enlargedImage && (
+        <div
+          className="modal-overlay"
+          style={{ zIndex: 1100, background: 'rgba(0,0,0,0.9)' }}
+          onClick={() => setEnlargedImage(null)}
+        >
+          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
+            <button
+              onClick={() => setEnlargedImage(null)}
+              style={{
+                position: 'absolute',
+                top: -40,
+                right: 0,
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '32px',
+                cursor: 'pointer'
+              }}
+            >
+              &times;
+            </button>
+            <img
+              src={enlargedImage}
+              alt="Enlarged"
+              style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '8px' }}
+              onClick={e => e.stopPropagation()}
+            />
           </div>
         </div>
       )}
