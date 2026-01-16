@@ -11,6 +11,7 @@ export default function CustomersPage() {
 
   useEffect(() => {
     fetchCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, searchTerm]);
 
   const fetchCustomers = async () => {
@@ -166,7 +167,7 @@ export default function CustomersPage() {
                   </td>
                   <td>
                     {customer.registerTime
-                      ? new Date(customer.registerTime).toLocaleDateString('ar', {
+                      ? new Date(customer.registerTime).toLocaleDateString('ar-EG', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',

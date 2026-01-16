@@ -4,10 +4,10 @@ import { authenticatedFetch } from '../auth/auth';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchStats = async () => {
@@ -18,13 +18,12 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Error:', error);
     }
-    setLoading(false);
   };
 
   return (
     <div>
       <h1 className="page-title">لوحة التحكم</h1>
-      
+
       <div className="stats-grid">
         <div className="stat-card primary">
           <div className="stat-label">إجمالي الطلبات</div>

@@ -24,6 +24,7 @@ function App() {
     if (isAuthenticated()) {
       setAuthenticated(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoginSuccess = (userData) => {

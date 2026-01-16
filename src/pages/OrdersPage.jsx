@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_URL } from '../config/api';
+import { API_URL, BASE_URL } from '../config/api';
 import { authenticatedFetch } from '../auth/auth';
 
 const statusLabels = {
@@ -17,22 +17,19 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('');
-  const [driverFilter, setDriverFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     fetchOrders();
-  }, [filter, dateFilter, driverFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, dateFilter]);
 
   const fetchOrders = async () => {
-    setLoading(true);
     try {
       const params = new URLSearchParams();
       if (filter !== 'all') params.append('status', filter);
       if (dateFilter) params.append('date', dateFilter);
-      if (driverFilter) params.append('driverId', driverFilter);
 
       const res = await authenticatedFetch(`${API_URL}/admin/orders?${params}`);
       const data = await res.json();
@@ -42,7 +39,6 @@ export default function OrdersPage() {
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
-    setLoading(false);
   };
 
   const filteredOrders = orders.filter(order => {
@@ -182,7 +178,7 @@ export default function OrdersPage() {
                 <div style={{ marginTop: '16px' }}>
                   <strong>صورة الفاتورة:</strong>
                   <img
-                    src={selectedOrder.invoiceImageUrl}
+                    src={selectedOrder.invoiceImageUrl.startsWith('http') ? selectedOrder.invoiceImageUrl : `${BASE_URL}/${selectedOrder.invoiceImageUrl}`}
                     alt="Invoice"
                     style={{ maxWidth: '100%', marginTop: '8px', borderRadius: '8px' }}
                   />

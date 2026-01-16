@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_URL } from '../config/api';
+import { API_URL, BASE_URL } from '../config/api';
 import { authenticatedFetch } from '../auth/auth';
 
 export default function DisputesPage() {
@@ -9,6 +9,7 @@ export default function DisputesPage() {
 
   useEffect(() => {
     fetchDisputes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchDisputes = async () => {
@@ -31,7 +32,7 @@ export default function DisputesPage() {
 
   const handleResolve = async (disputeId) => {
     if (!window.confirm('هل تريد حل هذا النزاع؟')) return;
-    
+
     try {
       const res = await authenticatedFetch(`${API_URL}/admin/disputes/${disputeId}/resolve`, {
         method: 'POST',
@@ -104,12 +105,13 @@ export default function DisputesPage() {
                       حل النزاع
                     </button>
                   )}
-                  <button 
-                    className="btn btn-sm" 
+                  <button
+                    className="btn btn-sm"
                     style={{ marginRight: 8 }}
                     onClick={() => {
                       if (dispute.Order?.invoiceImageUrl) {
-                        window.open(dispute.Order.invoiceImageUrl, '_blank');
+                        const url = dispute.Order.invoiceImageUrl.startsWith('http') ? dispute.Order.invoiceImageUrl : `${BASE_URL}/${dispute.Order.invoiceImageUrl}`;
+                        window.open(url, '_blank');
                       }
                     }}
                   >
@@ -149,9 +151,9 @@ export default function DisputesPage() {
               {selectedDispute.Order?.invoiceImageUrl && (
                 <div style={{ marginTop: '16px' }}>
                   <strong>صورة الفاتورة:</strong>
-                  <img 
-                    src={selectedDispute.Order.invoiceImageUrl} 
-                    alt="Invoice" 
+                  <img
+                    src={selectedDispute.Order.invoiceImageUrl.startsWith('http') ? selectedDispute.Order.invoiceImageUrl : `${BASE_URL}/${selectedDispute.Order.invoiceImageUrl}`}
+                    alt="Invoice"
                     style={{ maxWidth: '100%', marginTop: '8px', borderRadius: '8px' }}
                   />
                 </div>
@@ -179,13 +181,13 @@ export default function DisputesPage() {
               </div>
             </div>
             <div style={{ marginTop: '24px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <button 
+              <button
                 onClick={() => setSelectedDispute(null)}
                 style={{ padding: '8px 24px', background: '#ccc', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
               >
                 إلغاء
               </button>
-              <button 
+              <button
                 onClick={() => handleResolve(selectedDispute.id)}
                 style={{ padding: '8px 24px', background: '#4caf50', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
               >

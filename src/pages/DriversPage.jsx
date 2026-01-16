@@ -9,6 +9,7 @@ export default function DriversPage() {
 
   useEffect(() => {
     fetchDrivers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const fetchDrivers = async () => {

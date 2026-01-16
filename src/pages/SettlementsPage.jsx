@@ -9,6 +9,7 @@ export default function SettlementsPage() {
 
   useEffect(() => {
     fetchSettlements();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
   const fetchSettlements = async () => {
